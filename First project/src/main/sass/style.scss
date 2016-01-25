@@ -1,7 +1,22 @@
 .login_button {
   width: 150px;
+  height: 50px;
+  margin: 15px 20px;
 }
 
 .create_event_button {
   width: 30%;
+}
+
+.event_list {
+  height: 200px;
+}
+
+.event_list_border {
+  border: 2px solid gray;
+}
+
+
+.next_button {
+  width: 100px;
 }

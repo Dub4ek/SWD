@@ -9,19 +9,23 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify');
 
 
-gulp.task('default', ['scripts','browserify', 'styles', 'copy-html', 'clean'], function() {
-    gulp.watch('./src/main/sass/**/*.scss', ['styles']);
-    gulp.watch('./src/main/js/**/*.js', ['scripts', 'browserify', 'clean']);
-    gulp.watch('./src/main/index.html', ['copy-html']);
-    gulp.watch('./build/index.html').on('change', browserSync.reload);
-
+gulp.task('default', ['browserify', 'styles', 'copy-html', 'watch'], function() {
     browserSync.init({
         server: './build'
     });
 });
 
+gulp.task('watch', function() {
+    gulp.watch('./src/main/sass/**/*.scss', ['styles']);
+    gulp.watch('./src/main/js/**/*.js', ['js-watch-reload']);
+    gulp.watch('./src/main/index.html', ['copy-html']);
+    gulp.watch('./build/index.html').on('change', browserSync.reload);
+})
+
+gulp.task('js-watch-reload', ['browserify'], browserSync.reload);
+
 gulp.task('clean', function() {
-    del(['./src/main/js/all.js']);
+    return del(['./src/main/all.js']);
 });
 
 gulp.task('copy-html', function() {
@@ -41,10 +45,10 @@ gulp.task('styles', function() {
         .pipe(browserSync.stream());
 });
 
-gulp.task('scripts', function() {
-    gulp.src('./src/main/js/**/*.js')
+gulp.task('scripts', ['clean'], function() {
+    return gulp.src('./src/main/js/**/*.js')
         .pipe(concat('all.js'))
-        .pipe(gulp.dest('./src/main/js/'));
+        .pipe(gulp.dest('./src/main/'));
 });
 
 gulp.task('scripts-dist', function() {
@@ -54,8 +58,8 @@ gulp.task('scripts-dist', function() {
         .pipe(gulp.dest('build/js'));
 });
 
-gulp.task('browserify', function() {
-    return browserify('./src/main/js/all.js')
+gulp.task('browserify', ['scripts'], function() {
+    return browserify('./src/main/all.js')
         .bundle()
         .pipe(source('all.js'))
         .pipe(gulp.dest('./build/js/'));
