@@ -47,11 +47,11 @@ eventBuilderModule.filter('upcomingDateFilter', function () {
 
         if (type === 'ALL') {
             return items.filter(function(item) {
-                return item.endDate > currentDate;
+                return new Date(item.endDate) > currentDate;
             });
         } else if (type === 'MY') {
             return items.filter(function(item) {
-                return item.endDate > currentDate && item.userId === auth.uid;
+                return new Date(item.endDate) > currentDate && item.userId === auth.uid;
             });
         }
     };
@@ -63,11 +63,11 @@ eventBuilderModule.filter('pastDateFilter', function () {
 
         if (type === 'ALL') {
             return items.filter(function(item) {
-                return item.endDate < currentDate;
+                return new Date(item.endDate) < currentDate;
             });
         } else if (type === 'MY') {
             return items.filter(function(item) {
-                return item.endDate < currentDate && item.userId === auth.uid;
+                return new Date(item.endDate) < currentDate && item.userId === auth.uid;
             });
         }
     };
@@ -162,7 +162,7 @@ eventBuilderModule.controller('MainPageCtrl', ['$scope', '$location', 'mySharedS
 }]);
 
 
-eventBuilderModule.controller('EventOverviewController', ['$scope', '$location', 'currentAuth', 'mySharedService', '$firebaseArray', function ($scope, $location, currentAuth, sharedService, $firebaseArray) {
+eventBuilderModule.controller('EventOverviewController', ['$scope', '$location', 'currentAuth', 'mySharedService', '$firebaseArray', '$mdDialog', function ($scope, $location, currentAuth, sharedService, $firebaseArray, $mdDialog) {
     $scope.createEventButtonCaption = 'Create Event';
     $scope.upcomingEventsCollection = getUpcomingEventsList();
     $scope.pastEventsCollection = getPastEventsList();
@@ -190,13 +190,30 @@ eventBuilderModule.controller('EventOverviewController', ['$scope', '$location',
         $location.path('/createEvent');
     }
 
+    $scope.listItem_clickHandler = function(item) {
+        function getItemInfoText(data) {
+            return data.friendList.reduce(function(prev, cur) {
+                return prev + ' ' + cur.fullName + ' (' + cur.email + ')';
+            }, '');
+        }
+
+        $mdDialog.show(
+            $mdDialog.alert()
+                .title('List of invited friends to the ' + item.name + ' event')
+                .textContent(getItemInfoText(item))
+                .ariaLabel('Event information')
+                .ok('Close')
+                .targetEvent(event)
+        );
+    }
+
     if (currentAuth) {
         sharedService.prepForBroadcast(currentAuth);
     }
 }]);
 
-eventBuilderModule.controller('CreateEventPageController', ['$scope', 'FirebaseArray', '$location', 'mySharedService', function ($scope, FirebaseArray, $location, sharedService) {
-    $scope.eventTypeCollection = ['Party', 'Dinner'];
+eventBuilderModule.controller('CreateEventPageController', ['$scope', 'FirebaseArray', '$location', 'currentAuth', function ($scope, FirebaseArray, $location, auth) {
+    $scope.eventTypeCollection = ['Party', 'Dinner', 'Breakfast', 'Picnic', 'Company party', 'Other'];
     $scope.selectedEventType = '';
     $scope.selectedEndDate = '';
     $scope.selectedStartDate = '';
@@ -210,7 +227,10 @@ eventBuilderModule.controller('CreateEventPageController', ['$scope', 'FirebaseA
     $scope.friendNameText = '';
     $scope.friendEmailText = '';
 
-    var loginUserUid = '';
+
+    function getAuthUserData(auth) {
+        return auth ? auth.uid : '';
+    }
 
     function getCreatedEvent() {
         var event = new EventItem();
@@ -218,13 +238,13 @@ eventBuilderModule.controller('CreateEventPageController', ['$scope', 'FirebaseA
         event.name = $scope.eventNameText;
         event.type = $scope.selectedEventType;
         event.host = $scope.eventHostText;
-        event.startDate = $scope.selectedStartDate;
-        event.endDate = $scope.selectedEndDate;
+        event.startDate = $scope.selectedStartDate.toUTCString();
+        event.endDate = $scope.selectedEndDate.toUTCString();
         event.friendList = $scope.addedFriendList.concat();
         event.country = $scope.countryText;
         event.city = $scope.cityText;
         event.address = $scope.addressText;
-        event.userId = loginUserUid;
+        event.userId = getAuthUserData(auth);
 
         return event;
     }
@@ -265,12 +285,6 @@ eventBuilderModule.controller('CreateEventPageController', ['$scope', 'FirebaseA
             $scope.friendEmailText = '';
         }
     }
-
-    $scope.$on('handleBroadcast', function() {
-        var loginUserData = sharedService.message ? sharedService.message.uid : null,
-
-        loginUserUid = loginUserData;
-    });
 }]);
 
 eventBuilderModule.controller('LoginPageController', ['$scope', 'FirebaseAuth', '$location', '$mdToast', '$document', function ($scope, FirebaseAuth, $location, $mdToast, $document) {
@@ -287,8 +301,8 @@ eventBuilderModule.controller('LoginPageController', ['$scope', 'FirebaseAuth', 
 
     function registerUser() {
         FirebaseAuth.$createUser({
-            email: $scope.emailText,
-            password: $scope.passwordText
+            email: $scope.emailTextCU,
+            password: $scope.passwordTextCU
         }).then(function (userData) {
                 $scope.disabledCreateButton = false;
                 $location.path('/');
