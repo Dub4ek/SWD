@@ -200,6 +200,7 @@ eventBuilderModule.controller('EventOverviewController', ['$scope', '$location',
         $mdDialog.show(
             $mdDialog.alert()
                 .title('List of invited friends to the ' + item.name + ' event')
+                .clickOutsideToClose(true)
                 .textContent(getItemInfoText(item))
                 .ariaLabel('Event information')
                 .ok('Close')
