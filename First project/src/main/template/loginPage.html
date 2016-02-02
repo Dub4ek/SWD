@@ -1,0 +1,53 @@
+<div layout="row">
+    <div layout-margin layout-padding flex="50">
+        <form name="projectForm">
+            <h3>
+                <span>Log in</span>
+            </h3>
+            <md-input-container class="md-block">
+                <label>Email</label>
+                <input type="email" name="email" ng-pattern="/^.+@.+\..+$/" ng-required="required" ng-model="emailTextCU">
+            </md-input-container>
+            <md-input-container class="md-block">
+                <label>Password</label>
+                <input required type="password" name="password" ng-model="passwordTextCU">
+            </md-input-container>
+            <md-input-container class="md-block">
+                <label>Confirm password</label>
+                <input required name="confirmPassword" type="password" ng-model="confirmPasswordTextCU">
+
+                <div ng-messages="projectForm.confirmPassword.$error">
+                    <div ng-if="showValidationError" ng-message="required">Passwords should be equal</div>
+                </div>
+            </md-input-container>
+            <div layout="row" layout-align="end center">
+                <md-button class="md-raised" ng-disabled="disabledCreateButton" ng-click="createAccountButton_clickHandler($event)">
+                    {{createAccountButtonHeader}}
+                </md-button>
+            </div>
+            <div id="toastPositionCU" layout="row" layout-align="end center">
+            </div>
+        </form>
+    </div>
+    <md-divider></md-divider>
+    <div layout-margin layout-padding flex="50">
+        <form name="signupForm">
+            <h3>
+                <span>Sign up</span>
+            </h3>
+            <md-input-container class="md-block">
+                <label>Email</label>
+                <input type="email" name="email" ng-model="emailTextSU" ng-pattern="/^.+@.+\..+$/" required>
+            </md-input-container>
+            <md-input-container class="md-block">
+                <label>Password</label>
+                <input type="password" ng-model="passwordTextSU" name="password" required>
+            </md-input-container>
+            <div layout="row" layout-align="end center">
+                <md-button ng-click="singupButton_clickHandler()" class="md-raised">{{signupButtonHeader}}</md-button>
+            </div>
+            <div id="toastPositionSU" layout="row" layout-align="end center">
+            </div>
+        </form>
+    </div>
+</div>

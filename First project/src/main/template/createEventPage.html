@@ -1,0 +1,101 @@
+<div class="tabsWizard" layout="column" ng-cloak>
+    <md-tabs md-dynamic-height class="md-accent" md-selected="currentStep">
+        <md-tab id="describeEventTab">
+            <md-tab-label>Describe Event</md-tab-label>
+            <md-tab-body>
+                <div layout="column" layout-margin flex>
+                    <form name="describeEventForm">
+                        <md-input-container class="md-block">
+                            <label>Name</label>
+                            <input required name="eventName" ng-model="eventNameText">
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Event type</label>
+                            <md-select name="eventType" ng-model="selectedEventType">
+                                <md-option ng-repeat="event in eventTypeCollection">
+                                    {{event}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Host</label>
+                            <input required name="eventHost" ng-model="eventHostText">
+                        </md-input-container>
+                        <div layout="row" layout-padding layout-margin>
+                            <div layout="row" layout-align="start center">
+                                <span>Start date</span>
+                                <md-datepicker required name="startDate" ng-model="selectedStartDate" md-placeholder="Enter date"></md-datepicker>
+                            </div>
+                            <div layout="row" layout-align="end center">
+                                <span>End date</span>
+                                <md-datepicker required name="endDate" ng-model="selectedEndDate" md-placeholder="Enter date"></md-datepicker>
+                            </div>
+                        </div>
+                        <div layout="row" layout-align="end center">
+                            <md-button ng-click="nextButton_clickHandler()" class="md-raised next_button">Next</md-button>
+                        </div>
+                    </form>
+                </div>
+            </md-tab-body>
+        </md-tab>
+        <md-tab id="inviteFriednsTab">
+            <md-tab-label>Invite friends</md-tab-label>
+            <md-tab-body>
+                <div layout="column" layout-margin flex>
+                    <form name="inviteFriendsForm">
+                        <md-content flex class="event_list_border">
+                            <md-list class="event_list">
+                                <md-list-item ng-repeat="item in addedFriendList">
+                                    <div class="md-list-item-text">
+                                        {{item.fullName}} {{item.email}}
+                                    </div>
+                                    <md-divider></md-divider>
+                                </md-list-item>
+                            </md-list>
+                        </md-content>
+                        <md-input-container class="md-block">
+                            <label>Full name</label>
+                            <input required name="friendName" ng-model="friendNameText">
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Email</label>
+                            <input required type="email" ng-model="friendEmailText" name="email" ng-pattern="/^.+@.+\..+$/" ng-required="required">
+                        </md-input-container>
+                        <div layout="row" layout-align="end center">
+                            <md-button ng-click="addFriendButton_clickHandler()" class="md-raised next_button">Add Friend</md-button>
+                        </div>
+                    </form>
+                    <div layout="row" layout-align="end center">
+                        <md-button ng-click="prevButton_clickHandler()" class="md-raised next_button">Previous</md-button>
+                        <md-button ng-click="nextButton_clickHandler()" class="md-raised next_button">Next</md-button>
+                    </div>
+                </div>
+            </md-tab-body>
+        </md-tab>
+        <md-tab id="locationTab">
+            <md-tab-label>Location</md-tab-label>
+            <md-tab-body>
+                <div layout="column" layout-margin flex>
+                    <form name="locationForm">
+                        <md-input-container class="md-block">
+                            <label>Country</label>
+                            <input required name="country" ng-model="countryText">
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>City</label>
+                            <input required name="city" ng-model="cityText">
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>Address</label>
+                            <input required name="address" ng-model="addressText">
+                        </md-input-container>
+                    </form>
+                    <div layout="row" layout-align="end center">
+                        <md-button ng-click="prevButton_clickHandler()" class="md-raised next_button">Previous</md-button>
+                        <md-button ng-click="completeButton_clickHandler()" class="md-raised next_button">Complete</md-button>
+                    </div>
+                </div>
+            </md-tab-body>
+        </md-tab>
+    </md-tabs>
+</div>

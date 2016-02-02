@@ -18,7 +18,7 @@ gulp.task('default', ['browserify', 'styles', 'copy-html', 'watch'], function() 
 gulp.task('watch', function() {
     gulp.watch('./src/main/sass/**/*.scss', ['styles']);
     gulp.watch('./src/main/js/**/*.js', ['js-watch-reload']);
-    gulp.watch('./src/main/index.html', ['copy-html']);
+    gulp.watch('./src/main/index.html', './src/main/template/**/*.html' ['copy-html']);
     gulp.watch('./build/index.html').on('change', browserSync.reload);
 })
 
@@ -31,6 +31,8 @@ gulp.task('clean', function() {
 gulp.task('copy-html', function() {
     gulp.src('./src/main/index.html')
         .pipe(gulp.dest('./build'));
+    gulp.src('./src/main/template/**/*.html')
+        .pipe(gulp.dest('./build/template/'));
 });
 
 gulp.task('styles', function() {
