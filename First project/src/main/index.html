@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Event builder application</title>
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
     <link rel="stylesheet" href="css/style.css">
@@ -20,7 +21,9 @@
                     {{loginButtonHeader}}
                 </md-button>
                 <div ng-show="userLogined" layout="row" layout-align="center center">
-                    <h3>{{userEmail}}</h3>
+                    <a href="" ng-click="userName_clickHandler()">
+                        <h3>{{userName}}</h3>
+                    </a>
                     <md-button class="md-raised login-button" aria-label="Log out" ng-click="logoutButton_clickHandler()">
                         {{logoutButtonHeader}}
                     </md-button>

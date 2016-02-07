@@ -1,4 +1,4 @@
-<md-button layout-padding ng-click="createEventButton_clickHandler(item)" class="md-raised create_event_button">{{createEventButtonCaption}}</md-button>
+<md-button layout-padding ng-click="vm.createEventButton_clickHandler(item)" class="md-raised create_event_button" ng-show="vm.userAuthenticated">{{vm.createEventButtonCaption}}</md-button>
 <div lauyout="column">
     <div layout="column" layout-margin>
         <div layout="row" layout-align="start start">
@@ -6,15 +6,15 @@
                 <span>Upcoming events</span>
             </h3>
             <span flex></span>
-            <md-radio-group layout="row" layout-align="end" ng-model="upcomingEventsSelectedType">
-                <md-radio-button class="md-primary" value="MY">My</md-radio-button>
+            <md-radio-group layout="row" layout-align="end" ng-model="vm.upcomingEventsSelectedType">
+                <md-radio-button ng-show="vm.userAuthenticated" class="md-primary" value="MY">My</md-radio-button>
                 <md-radio-button class="md-primary" value="ALL"> All</md-radio-button>
             </md-radio-group>
         </div>
         <md-content flex class="event_list_border">
             <md-list class="event_list">
-                <md-list-item class="md-3-line" ng-repeat="item in upcomingEventsCollection | upcomingDateFilter:upcomingEventsSelectedType:authInfo"
-                              ng-click="listItem_clickHandler(item)">
+                <md-list-item class="md-3-line" ng-repeat="item in vm.upcomingEventsCollection | upcomingDateFilter:vm.upcomingEventsSelectedType:vm.authInfo"
+                              ng-click="vm.listItem_clickHandler(item)">
                     <div class="md-list-item-text">
                         <h3>{{item.name}}</h3>
                         <h4>{{item.startDate}} - {{item.endDate}}</h4>
@@ -32,15 +32,15 @@
                 <span>Past events</span>
             </h3>
             <span flex></span>
-            <md-radio-group layout="row" layout-align="end" ng-model="pastEventsSelectedType">
-                <md-radio-button class="md-primary" value="MY">My</md-radio-button>
+            <md-radio-group layout="row" layout-align="end" ng-model="vm.pastEventsSelectedType">
+                <md-radio-button ng-show="vm.userAuthenticated" class="md-primary" value="MY">My</md-radio-button>
                 <md-radio-button class="md-primary" value="ALL"> All</md-radio-button>
             </md-radio-group>
         </div>
         <md-content flex class="event_list_border">
             <md-list class="event_list">
-                <md-list-item ng-repeat="item in pastEventsCollection | pastDateFilter:pastEventsSelectedType:authInfo" ng-click="listItem_clickHandler(item)">
-                    <div layout="row">
+                <md-list-item class="md-3-line" ng-repeat="item in vm.pastEventsCollection | pastDateFilter:vm.pastEventsSelectedType:vm.authInfo" ng-click="vm.listItem_clickHandler(item)">
+                    <div class="md-list-item-text">
                         <h3>{{item.name}}</h3>
                         <h4>{{item.startDate}} - {{item.endDate}}</h4>
 

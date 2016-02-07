@@ -1,28 +1,35 @@
-<div layout="row">
-    <div layout-margin layout-padding flex="50">
-        <form name="projectForm">
+<div layout="row" layout-xs="column">
+    <div layout-margin layout-padding flex="50" flex-xs="100">
+        <form name="vm.projectForm">
             <h3>
-                <span>Log in</span>
+                <span>Sign up</span>
             </h3>
             <md-input-container class="md-block">
-                <label>Email</label>
-                <input type="email" name="email" ng-pattern="/^.+@.+\..+$/" ng-required="required" ng-model="emailTextCU">
+                <label for="nameInput">Name</label>
+                <input id="nameInput" type="text" name="nameInput" required ng-model="vm.nameTextCU" autofocus="true">
             </md-input-container>
             <md-input-container class="md-block">
-                <label>Password</label>
-                <input required type="password" name="password" ng-model="passwordTextCU">
+                <label for="emailInput">Email</label>
+                <input id="emailInput" type="email" name="email" required ng-pattern="/^.+@.+\..+$/" ng-model="vm.emailTextCU" autofocus="true">
+                <div ng-messages="vm.projectForm.email.$error" role="alert" multiple>
+                    <div ng-message="pattern" class="my-message">Incorrect email</div>
+                </div>
             </md-input-container>
             <md-input-container class="md-block">
-                <label>Confirm password</label>
-                <input required name="confirmPassword" type="password" ng-model="confirmPasswordTextCU">
-
+                <label for="passwordInput">Password</label>
+                <input id="passwordInput" required type="password" name="password" ng-model="vm.passwordTextCU">
+            </md-input-container>
+            <md-input-container class="md-block">
+                <label for="confirmPasswordInput">Confirm password</label>
+                <input id="confirmPasswordInput" required name="confirmPassword" type="password" ng-model="vm.confirmPasswordTextCU">
                 <div ng-messages="projectForm.confirmPassword.$error">
                     <div ng-if="showValidationError" ng-message="required">Passwords should be equal</div>
                 </div>
             </md-input-container>
+            <md-datepicker name="myBirthday" required ng-model="vm.myBirthday" md-placeholder="Enter birthday"></md-datepicker>
             <div layout="row" layout-align="end center">
-                <md-button class="md-raised" ng-disabled="disabledCreateButton" ng-click="createAccountButton_clickHandler($event)">
-                    {{createAccountButtonHeader}}
+                <md-button class="md-raised" ng-disabled="vm.disabledCreateButton" ng-click="vm.createAccountButton_clickHandler($event)">
+                    {{vm.createAccountButtonHeader}}
                 </md-button>
             </div>
             <div id="toastPositionCU" layout="row" layout-align="end center">
@@ -30,21 +37,21 @@
         </form>
     </div>
     <md-divider></md-divider>
-    <div layout-margin layout-padding flex="50">
-        <form name="signupForm">
+    <div layout-margin layout-padding flex="50" flex-xs="100">
+        <form name="vm.signupForm">
             <h3>
-                <span>Sign up</span>
+                <span>Log in</span>
             </h3>
             <md-input-container class="md-block">
-                <label>Email</label>
-                <input type="email" name="email" ng-model="emailTextSU" ng-pattern="/^.+@.+\..+$/" required>
+                <label for="emailSUInput">Email</label>
+                <input id="emailSUInput" type="email" name="email" ng-model="vm.emailTextSU" ng-pattern="/^.+@.+\..+$/" required>
             </md-input-container>
             <md-input-container class="md-block">
-                <label>Password</label>
-                <input type="password" ng-model="passwordTextSU" name="password" required>
+                <label for="passwordSUInput">Password</label>
+                <input id="passwordSUInput" type="password" ng-model="vm.passwordTextSU" name="password" required>
             </md-input-container>
             <div layout="row" layout-align="end center">
-                <md-button ng-click="singupButton_clickHandler()" class="md-raised">{{signupButtonHeader}}</md-button>
+                <md-button ng-click="vm.singupButton_clickHandler()" class="md-raised">{{vm.signupButtonHeader}}</md-button>
             </div>
             <div id="toastPositionSU" layout="row" layout-align="end center">
             </div>

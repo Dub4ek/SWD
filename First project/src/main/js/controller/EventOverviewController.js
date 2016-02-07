@@ -1,50 +1,67 @@
-angular.module('Event_builder_app').controller('EventOverviewController', ['$scope', '$location', 'currentAuth', 'mySharedService', '$firebaseArray', '$mdDialog', function ($scope, $location, currentAuth, sharedService, $firebaseArray, $mdDialog) {
-    $scope.createEventButtonCaption = 'Create Event';
-    $scope.upcomingEventsCollection = getUpcomingEventsList();
-    $scope.pastEventsCollection = getPastEventsList();
-    $scope.upcomingEventsSelectedType = 'ALL';
-    $scope.pastEventsSelectedType = 'ALL';
-    $scope.authInfo = currentAuth;
+(function () {
+    'use strict';
 
-    function getUpcomingEventsList() {
-        var Firebase = require('firebase'),
-            baseRef = new Firebase('https://intense-heat-1833.firebaseio.com/'),
-            query = baseRef.orderByChild('startDate')
+    angular
+        .module('Event_builder_app')
+        .controller('EventOverviewController', EventOverviewController);
 
-        return $firebaseArray(query);
-    }
+    EventOverviewController.$inject = ['$location', 'currentAuth', 'mySharedService', '$firebaseArray', '$mdDialog'];
 
-    function getPastEventsList() {
-        var Firebase = require('firebase'),
-            baseRef = new Firebase('https://intense-heat-1833.firebaseio.com/'),
-            query = baseRef.orderByChild('startDate')
 
-        return $firebaseArray(query);
-    }
+    function EventOverviewController($location, currentAuth, sharedService, $firebaseArray, $mdDialog) {
+        var vm = this;
 
-    $scope.createEventButton_clickHandler = function () {
-        $location.path('/createEvent');
-    }
+        vm.createEventButtonCaption = 'Create Event';
+        vm.upcomingEventsCollection = getUpcomingEventsList();
+        vm.pastEventsCollection = getPastEventsList();
+        vm.upcomingEventsSelectedType = 'ALL';
+        vm.pastEventsSelectedType = 'ALL';
+        vm.authInfo = currentAuth;
+        vm.userAuthenticated = false;
 
-    $scope.listItem_clickHandler = function (item) {
-        function getItemInfoText(data) {
-            return data.friendList.reduce(function (prev, cur) {
-                return prev + ' ' + cur.fullName + ' (' + cur.email + ')';
-            }, '');
+        function getUpcomingEventsList() {
+            var Firebase = require('firebase'),
+                baseRef = new Firebase('https://intense-heat-1833.firebaseio.com/'),
+                query = baseRef.orderByChild('startDate')
+
+            return $firebaseArray(query);
         }
 
-        $mdDialog.show(
-            $mdDialog.alert()
-                .title('List of invited friends to the ' + item.name + ' event')
-                .clickOutsideToClose(true)
-                .textContent(getItemInfoText(item))
-                .ariaLabel('Event information')
-                .ok('Close')
-                .targetEvent(event)
-        );
-    }
+        function getPastEventsList() {
+            var Firebase = require('firebase'),
+                baseRef = new Firebase('https://intense-heat-1833.firebaseio.com/'),
+                query = baseRef.orderByChild('startDate')
 
-    if (currentAuth) {
-        sharedService.prepForBroadcast(currentAuth);
+            return $firebaseArray(query);
+        }
+
+        vm.createEventButton_clickHandler = function () {
+            $location.path('/createEvent');
+        }
+
+        vm.listItem_clickHandler = function (item) {
+            function getItemInfoText(data) {
+                return data.friendList.reduce(function (prev, cur) {
+                    return prev + ' ' + cur.fullName + ' (' + cur.email + ')';
+                }, '');
+            }
+
+            $mdDialog.show(
+                $mdDialog.alert()
+                    .title('List of invited friends to the ' + item.name + ' event')
+                    .clickOutsideToClose(true)
+                    .textContent(getItemInfoText(item))
+                    .ariaLabel('Event information')
+                    .ok('Close')
+                    .targetEvent(event)
+            );
+        }
+
+        if (currentAuth) {
+            sharedService.prepForBroadcast(currentAuth);
+            vm.userAuthenticated = true;
+        } else {
+            vm.userAuthenticated = false;
+        }
     }
-}]);
+})();

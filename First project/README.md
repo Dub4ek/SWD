@@ -15,7 +15,7 @@ Project that help users to organize it's events
 - install nodejs on your computer,
 - open command line and enter 'npm install'
 - NodeJs automatically install all dependencies for this project. List of dependencies you can find in package.json file
-- for developing enter in command line gulp
+- for developing enter in command line 'gulp build'
 
 
 

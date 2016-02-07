@@ -1,94 +1,143 @@
-angular.module('Event_builder_app').controller('LoginPageController', ['$scope', 'FirebaseAuth', '$location', '$mdToast', '$document', function ($scope, FirebaseAuth, $location, $mdToast, $document) {
-    $scope.createAccountButtonHeader = 'Create an account';
-    $scope.signupButtonHeader = 'Sign up';
-    $scope.passwordTextCU = '';
-    $scope.emailTextCU = '';
-    $scope.passwordTextSU = '';
-    $scope.emailTextSU = '';
-    $scope.confirmPasswordTextCU = '';
-    $scope.showValidationError = false;
-    $scope.disabledCreateButton = false;
+(function () {
+    'use strict';
+
+    angular
+        .module('Event_builder_app')
+        .controller('LoginPageController', LoginPageController);
+
+    LoginPageController.$inject = ['FirebaseAuth', 'FirebaseAccounts', '$location', '$mdToast', '$document'];
 
 
-    function registerUser() {
-        FirebaseAuth.$createUser({
-            email: $scope.emailTextCU,
-            password: $scope.passwordTextCU
-        }).then(function (userData) {
-                $scope.disabledCreateButton = false;
-                $location.path('/');
-            }).catch(function (error) {
-                $scope.disabledCreateButton = false;
-                function getErrorText(data) {
-                    if (data.hasOwnProperty('code')) {
-                        if (data.code === 'EMAIL_TAKEN') {
-                            return 'Entered email already exist. Please, use another email address'
-                        } else {
-                            return 'Something wrong. Please, use another email address'
+    function LoginPageController(FirebaseAuth, FirebaseAccounts, $location, $mdToast, $document) {
+        var vm = this;
+
+        vm.createAccountButtonHeader = 'Create an account';
+        vm.signupButtonHeader = 'Sign up';
+        vm.passwordTextCU = '';
+        vm.emailTextCU = '';
+        vm.nameTextCU = '';
+        vm.passwordTextSU = '';
+        vm.emailTextSU = '';
+        vm.confirmPasswordTextCU = '';
+        vm.showValidationError = false;
+        vm.disabledCreateButton = false;
+        vm.myBirthday=null;
+
+        function saveUserData(data) {
+            var accounts = FirebaseAccounts;
+
+            accounts[data.uid] = {
+                name: vm.nameTextCU,
+                birthday: vm.myBirthday.toUTCString()
+            };
+
+            accounts.$save()
+                .then(function() {
+                    signupUser(vm.emailTextCU, vm.passwordTextCU);
+                })
+                .catch(function() {
+                    $mdToast.show(
+                        $mdToast.simple()
+                            .textContent('Error occurred. Please, refresh page and try again')
+                            .parent($document[0].querySelector('#toastPositionCU'))
+                            .position('top right')
+                            .hideDelay(6000)
+                    );
+                });
+        }
+
+        function registerUser(email, password) {
+            FirebaseAuth.$createUser({
+                email: email,
+                password: password
+            }).then(function (userData) {
+                    vm.disabledCreateButton = false;
+                    saveUserData(userData);
+                }).catch(function (error) {
+                    vm.disabledCreateButton = false;
+                    function getErrorText(data) {
+                        if (data.hasOwnProperty('code')) {
+                            if (data.code === 'EMAIL_TAKEN') {
+                                return 'Entered email already exist. Please, use another email address'
+                            } else {
+                                return 'Something wrong. Please, use another email address'
+                            }
                         }
                     }
-                }
 
+                    $mdToast.show(
+                        $mdToast.simple()
+                            .textContent(getErrorText(error))
+                            .parent($document[0].querySelector('#toastPositionCU'))
+                            .position('top right')
+                            .hideDelay(6000)
+                    );
+                });
+        }
+
+        function checkValidationErrors(obj) {
+            if (obj.hasOwnProperty('$error')) {
+                return Object.keys(obj.$error).length === 0;
+            }
+
+            return false;
+        }
+
+        vm.createAccountButton_clickHandler = function ($event) {
+            vm.showValidationError = !(vm.passwordText === vm.confirmPasswordText);
+            vm.disabledCreateButton = true;
+
+            if (checkValidationErrors(vm.projectForm.email) &&
+                checkValidationErrors(vm.projectForm.password) &&
+                checkValidationErrors(vm.projectForm.confirmPassword) &&
+                !vm.showValidationError &&
+                checkValidationErrors(vm.projectForm.nameInput) &&
+                checkValidationErrors(vm.projectForm.myBirthday)) {
+                registerUser(vm.emailTextCU, vm.passwordTextCU);
+            } else {
+                vm.disabledCreateButton = false;
                 $mdToast.show(
                     $mdToast.simple()
-                        .textContent(getErrorText(error))
+                        .textContent('Please, enter correctly all required data')
                         .parent($document[0].querySelector('#toastPositionCU'))
                         .position('top right')
                         .hideDelay(6000)
                 );
-            });
-    }
-
-    function checkValidationErrors(obj) {
-        if (obj.hasOwnProperty('$error')) {
-            return Object.keys(obj.$error).length === 0;
+            }
         }
 
-        return false;
-    }
+        function signupUser(email, password) {
+            FirebaseAuth.$authWithPassword({
+                email: email,
+                password: password
+            }).then(function (userData) {
+                    $location.path('/');
+                }).catch(function (error) {
 
-    $scope.createAccountButton_clickHandler = function ($event) {
-        $scope.showValidationError = !($scope.passwordText === $scope.confirmPasswordText);
-        $scope.disabledCreateButton = true;
-
-        if (checkValidationErrors($scope.projectForm.email) && checkValidationErrors($scope.projectForm.password) && checkValidationErrors($scope.projectForm.confirmPassword) && !$scope.showValidationError) {
-            registerUser();
-        } else {
-            $scope.disabledCreateButton = false;
-        }
-    }
-
-    function signupUser() {
-        FirebaseAuth.$authWithPassword({
-            email: $scope.emailTextSU,
-            password: $scope.passwordTextSU
-        }).then(function (userData) {
-                $location.path('/');
-            }).catch(function (error) {
-
-                function getErrorText(data) {
-                    if (data.hasOwnProperty('code')) {
-                        if (data.code === 'INVALID_PASSWORD') {
-                            return 'Incorrect password was entered. Please, try again.'
-                        } else {
-                            return 'Something wrong. Please, use another account settings'
+                    function getErrorText(data) {
+                        if (data.hasOwnProperty('code')) {
+                            if (data.code === 'INVALID_PASSWORD') {
+                                return 'Incorrect password was entered. Please, try again.'
+                            } else {
+                                return 'Something wrong. Please, use another account settings'
+                            }
                         }
                     }
-                }
 
-                $mdToast.show(
-                    $mdToast.simple()
-                        .textContent(getErrorText(error))
-                        .parent($document[0].querySelector('#toastPositionSU'))
-                        .position('top right')
-                        .hideDelay(6000)
-                );
-            });
-    }
+                    $mdToast.show(
+                        $mdToast.simple()
+                            .textContent(getErrorText(error))
+                            .parent($document[0].querySelector('#toastPositionSU'))
+                            .position('top right')
+                            .hideDelay(6000)
+                    );
+                });
+        }
 
-    $scope.singupButton_clickHandler = function () {
-        if (checkValidationErrors($scope.signupForm.email) && checkValidationErrors($scope.signupForm.password)) {
-            signupUser();
+        vm.singupButton_clickHandler = function () {
+            if (checkValidationErrors(vm.signupForm.email) && checkValidationErrors(vm.signupForm.password)) {
+                signupUser(vm.emailTextSU, vm.passwordTextSU);
+            }
         }
     }
-}]);
+})();

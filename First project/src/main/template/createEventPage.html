@@ -1,38 +1,46 @@
 <div class="tabsWizard" layout="column" ng-cloak>
-    <md-tabs md-dynamic-height class="md-accent" md-selected="currentStep">
+    <md-tabs md-dynamic-height class="md-accent" md-selected="vm.currentStep">
         <md-tab id="describeEventTab">
             <md-tab-label>Describe Event</md-tab-label>
             <md-tab-body>
                 <div layout="column" layout-margin flex>
-                    <form name="describeEventForm">
+                    <form name="vm.describeEventForm">
                         <md-input-container class="md-block">
-                            <label>Name</label>
-                            <input required name="eventName" ng-model="eventNameText">
+                            <label for="eventNameInput">Name</label>
+                            <input autofocus="true" required id="eventNameInput" name="eventName" type="text" ng-model="vm.eventNameText">
                         </md-input-container>
                         <md-input-container class="md-block">
                             <label>Event type</label>
-                            <md-select name="eventType" ng-model="selectedEventType">
-                                <md-option ng-repeat="event in eventTypeCollection">
+                            <md-select name="eventType" ng-model="vm.selectedEventType">
+                                <md-option ng-repeat="event in vm.eventTypeCollection">
                                     {{event}}
                                 </md-option>
                             </md-select>
                         </md-input-container>
                         <md-input-container class="md-block">
-                            <label>Host</label>
-                            <input required name="eventHost" ng-model="eventHostText">
+                            <label for="eventHostInput">Host</label>
+                            <input id="eventHostInput" required name="eventHost" ng-model="vm.eventHostText" type="text">
                         </md-input-container>
-                        <div layout="row" layout-padding layout-margin>
-                            <div layout="row" layout-align="start center">
-                                <span>Start date</span>
-                                <md-datepicker required name="startDate" ng-model="selectedStartDate" md-placeholder="Enter date"></md-datepicker>
-                            </div>
-                            <div layout="row" layout-align="end center">
-                                <span>End date</span>
-                                <md-datepicker required name="endDate" ng-model="selectedEndDate" md-placeholder="Enter date"></md-datepicker>
-                            </div>
+                        <div layout="row" layout-xs="column" layout-align="start center">
+                            <md-input-container>
+                                <label for="startDateTime">Start Date & Time</label>
+                                <input id="startDateTime" type="datetime-local" name="startDateTime" ng-model="vm.startDateTime" required>
+                                <div ng-messages="vm.describeEventForm.startDateTime.$error" role="alert" multiple>
+                                    <div ng-message="required" class="my-message">Please, set start date and time of the event</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container>
+                                <label for="endDateTime">End Date & Time</label>
+                                <input id="endDateTime" type="datetime-local" name="endDateTime" ng-model="vm.endDateTime" required>
+                                <div ng-messages="describeEventForm.endDateTime.$error" role="alert" multiple>
+                                    <div ng-message="required" class="my-message">Please, set end date and time of the event</div>
+                                </div>
+                            </md-input-container>
                         </div>
                         <div layout="row" layout-align="end center">
-                            <md-button ng-click="nextButton_clickHandler()" class="md-raised next_button">Next</md-button>
+                            <md-button ng-click="vm.nextButton_clickHandler()" class="md-raised next_button">Next</md-button>
+                        </div>
+                        <div id="toastPositionEvent" layout="row" layout-align="end center">
                         </div>
                     </form>
                 </div>
@@ -42,10 +50,10 @@
             <md-tab-label>Invite friends</md-tab-label>
             <md-tab-body>
                 <div layout="column" layout-margin flex>
-                    <form name="inviteFriendsForm">
+                    <form name="vm.inviteFriendsForm">
                         <md-content flex class="event_list_border">
                             <md-list class="event_list">
-                                <md-list-item ng-repeat="item in addedFriendList">
+                                <md-list-item ng-repeat="item in vm.addedFriendList">
                                     <div class="md-list-item-text">
                                         {{item.fullName}} {{item.email}}
                                     </div>
@@ -54,20 +62,23 @@
                             </md-list>
                         </md-content>
                         <md-input-container class="md-block">
-                            <label>Full name</label>
-                            <input required name="friendName" ng-model="friendNameText">
+                            <label for="friendNameInput">Full name</label>
+                            <input id="friendNameInput" required name="friendName" ng-model="vm.friendNameText" type="text" autofocus="true">
                         </md-input-container>
                         <md-input-container class="md-block">
-                            <label>Email</label>
-                            <input required type="email" ng-model="friendEmailText" name="email" ng-pattern="/^.+@.+\..+$/" ng-required="required">
+                            <label for="friendEmailInput">Email</label>
+                            <input id="friendEmailInput" required type="email" ng-model="vm.friendEmailText" name="email" ng-pattern="/^.+@.+\..+$/"
+                                   ng-required="required">
                         </md-input-container>
                         <div layout="row" layout-align="end center">
-                            <md-button ng-click="addFriendButton_clickHandler()" class="md-raised next_button">Add Friend</md-button>
+                            <md-button ng-click="vm.addFriendButton_clickHandler()" class="md-raised next_button">Add Friend</md-button>
                         </div>
                     </form>
+                    <div id="toastPositionFriends" layout="row" layout-align="end center">
+                    </div>
                     <div layout="row" layout-align="end center">
-                        <md-button ng-click="prevButton_clickHandler()" class="md-raised next_button">Previous</md-button>
-                        <md-button ng-click="nextButton_clickHandler()" class="md-raised next_button">Next</md-button>
+                        <md-button ng-click="vm.prevButton_clickHandler()" class="md-raised next_button">Previous</md-button>
+                        <md-button ng-click="vm.nextButton_clickHandler()" class="md-raised next_button">Next</md-button>
                     </div>
                 </div>
             </md-tab-body>
@@ -76,23 +87,23 @@
             <md-tab-label>Location</md-tab-label>
             <md-tab-body>
                 <div layout="column" layout-margin flex>
-                    <form name="locationForm">
+                    <form name="vm.locationForm">
                         <md-input-container class="md-block">
-                            <label>Country</label>
-                            <input required name="country" ng-model="countryText">
+                            <label for="countryInput">Country</label>
+                            <input id="countryInput" autofocus="true" required name="country" ng-model="vm.countryText" type="text">
                         </md-input-container>
                         <md-input-container class="md-block">
-                            <label>City</label>
-                            <input required name="city" ng-model="cityText">
+                            <label for="cityInput">City</label>
+                            <input id="cityInput" required name="city" ng-model="vm.cityText" type="text">
                         </md-input-container>
                         <md-input-container class="md-block">
-                            <label>Address</label>
-                            <input required name="address" ng-model="addressText">
+                            <label for="addressInput">Address</label>
+                            <input id="addressInput" required name="address" ng-model="vm.addressText" type="text">
                         </md-input-container>
                     </form>
                     <div layout="row" layout-align="end center">
-                        <md-button ng-click="prevButton_clickHandler()" class="md-raised next_button">Previous</md-button>
-                        <md-button ng-click="completeButton_clickHandler()" class="md-raised next_button">Complete</md-button>
+                        <md-button ng-click="vm.prevButton_clickHandler()" class="md-raised next_button">Previous</md-button>
+                        <md-button ng-click="vm.completeButton_clickHandler()" class="md-raised next_button">Complete</md-button>
                     </div>
                 </div>
             </md-tab-body>

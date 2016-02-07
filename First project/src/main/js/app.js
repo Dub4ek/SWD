@@ -40,6 +40,15 @@ eventBuilderModule.factory("FirebaseArray", ["$firebaseArray",
     }
 ]);
 
+eventBuilderModule.factory("FirebaseAccounts", ["$firebaseObject",
+    function ($firebaseObject) {
+        var Firebase = require('firebase');
+        var baseRef = new Firebase('https://intense-heat-1833.firebaseio.com/accounts');
+
+        return $firebaseObject(baseRef);
+    }
+]);
+
 
 eventBuilderModule.filter('upcomingDateFilter', function () {
     return function (items, type, auth) {
@@ -93,6 +102,7 @@ eventBuilderModule.factory('mySharedService', function ($rootScope) {
 
 eventBuilderModule.run(["$rootScope", "$location", function ($rootScope, $location) {
     $rootScope.$on("$routeChangeError", function (event, next, previous, error) {
+        console.log('Error', error);
         if (error === "AUTH_REQUIRED") {
             $location.path("/login");
         }
@@ -105,24 +115,27 @@ eventBuilderModule.config(function ($routeProvider) {
         .when('/', {
             templateUrl: 'template/mainPage.html',
             controller: 'EventOverviewController',
+            controllerAs: 'vm',
             resolve: {
                 currentAuth: ["FirebaseAuth", function (FirebaseAuth) {
-                    return FirebaseAuth.$requireAuth();
+                    return FirebaseAuth.$waitForAuth();
                 }]
             }
         })
         .when('/createEvent', {
             templateUrl: 'template/createEventPage.html',
             controller: 'CreateEventPageController',
+            controllerAs: 'vm',
             resolve: {
                 "currentAuth": ["FirebaseAuth", function (FirebaseAuth) {
-                    return FirebaseAuth.$waitForAuth();
+                    return FirebaseAuth.$requireAuth();
                 }]
             }
         })
         .when('/login', {
             templateUrl: 'template/loginPage.html',
-            controller: 'LoginPageController'
+            controller: 'LoginPageController',
+            controllerAs: 'vm'
         });
 });
 
