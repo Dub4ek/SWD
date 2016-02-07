@@ -16,7 +16,7 @@ gulp.task('default', ['browserify', 'styles', 'copy-html', 'watch'], function() 
     });
 });
 
-gulp.task('build', ['browserify-dist', 'styles', 'copy-html']);
+gulp.task('build', ['browserify', 'styles', 'copy-html']);
 
 gulp.task('watch', function() {
     gulp.watch('./src/main/sass/**/*.scss', ['styles']);
