@@ -24,15 +24,3 @@
 .user_name_span {
   line-height: 50px;
 }
-
-.tabsWizard md-tabs md-tabs-wrapper {
-  background: cornflowerblue;
-}
-
-md-tabs.md-accent > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]) {
-  color: #000000;
-}
-
-md-tabs-canvas {
-  pointer-events: none;
-}
