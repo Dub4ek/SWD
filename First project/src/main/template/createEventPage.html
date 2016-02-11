@@ -1,8 +1,8 @@
-<div class="tabsWizard" layout="column" layout-margin layout-padding ng-cloak>
+<div class="tabsWizard" layout="column" layout-margin layout-padding>
     <form name="vm.describeEventForm">
         <md-input-container class="md-block">
             <label for="eventNameInput">Name</label>
-            <input autofocus="true" required id="eventNameInput" name="eventName" type="text" ng-model="vm.eventNameText">
+            <input required id="eventNameInput" name="eventName" type="text" autofocus="true" ng-model="vm.eventNameText">
         </md-input-container>
         <md-input-container class="md-block">
             <label>Event type</label>
@@ -34,7 +34,7 @@
         </div>
         <md-input-container class="md-block">
             <label for="countryInput">Country</label>
-            <input id="countryInput" autofocus="true" required name="country" ng-model="vm.countryText" type="text">
+            <input id="countryInput" required name="country" ng-model="vm.countryText" type="text">
         </md-input-container>
         <md-input-container class="md-block">
             <label for="cityInput">City</label>

@@ -10,7 +10,7 @@
             </md-input-container>
             <md-input-container class="md-block">
                 <label for="emailInput">Email</label>
-                <input id="emailInput" type="email" name="email" required ng-pattern="/^.+@.+\..+$/" ng-model="vm.emailTextCU" autofocus="true">
+                <input id="emailInput" type="email" name="email" required ng-pattern="/^.+@.+\..+$/" ng-model="vm.emailTextCU">
                 <div ng-messages="vm.projectForm.email.$error" role="alert" multiple>
                     <div ng-message="pattern" class="my-message">Incorrect email</div>
                 </div>
