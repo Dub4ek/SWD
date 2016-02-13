@@ -26,7 +26,7 @@
                     <div ng-if="showValidationError" ng-message="required">Passwords should be equal</div>
                 </div>
             </md-input-container>
-            <md-datepicker name="myBirthday" required ng-model="vm.myBirthday" md-placeholder="Enter birthday"></md-datepicker>
+            <md-datepicker name="myBirthday" ng-model="vm.myBirthday" md-placeholder="Enter birthday"></md-datepicker>
             <div layout="row" layout-align="end center">
                 <md-button class="md-raised" ng-disabled="vm.disabledCreateButton" ng-click="vm.createAccountButton_clickHandler($event)">
                     {{vm.createAccountButtonHeader}}
@@ -51,7 +51,7 @@
                 <input id="passwordSUInput" type="password" ng-model="vm.passwordTextSU" name="password" required>
             </md-input-container>
             <div layout="row" layout-align="end center">
-                <md-button ng-click="vm.singupButton_clickHandler()" class="md-raised">{{vm.signupButtonHeader}}</md-button>
+                <md-button ng-click="vm.loginButton_clickHandler()" class="md-raised">{{vm.loginButtonHeader}}</md-button>
             </div>
             <div id="toastPositionSU" layout="row" layout-align="end center">
             </div>

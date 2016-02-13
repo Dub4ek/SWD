@@ -12,7 +12,7 @@
         var vm = this;
 
         vm.createAccountButtonHeader = 'Create an account';
-        vm.signupButtonHeader = 'Sign up';
+        vm.loginButtonHeader = 'Log in';
         vm.passwordTextCU = '';
         vm.emailTextCU = '';
         vm.nameTextCU = '';
@@ -134,7 +134,7 @@
                 });
         }
 
-        vm.singupButton_clickHandler = function () {
+        vm.loginButton_clickHandler = function () {
             if (checkValidationErrors(vm.signupForm.email) && checkValidationErrors(vm.signupForm.password)) {
                 signupUser(vm.emailTextSU, vm.passwordTextSU);
             }

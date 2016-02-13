@@ -7,6 +7,7 @@ var gulp = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
     del = require('del'),
     uglify = require('gulp-uglify'),
+    serve = require('gulp-serve'),
     buffer = require('vinyl-buffer');
 
 
@@ -16,7 +17,9 @@ gulp.task('default', ['browserify', 'styles', 'copy-html', 'watch'], function() 
     });
 });
 
-gulp.task('build', ['browserify', 'styles', 'copy-html']);
+gulp.task('build', ['browserify', 'styles', 'copy-html', 'start-server']);
+
+gulp.task('start-server', serve('build'));
 
 gulp.task('watch', function() {
     gulp.watch('./src/main/sass/**/*.scss', ['styles']);

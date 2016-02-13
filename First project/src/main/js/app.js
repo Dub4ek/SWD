@@ -11,8 +11,6 @@ function EventItem() {
     this.startDate = '';
     this.endDate = '';
     this.friendList = [];
-    this.country = '';
-    this.city = '';
     this.address = '';
     this.userId = '';
 }
