@@ -10,20 +10,21 @@
             </md-input-container>
             <md-input-container class="md-block">
                 <label for="emailInput">Email</label>
-                <input id="emailInput" type="email" name="email" required ng-pattern="/^.+@.+\..+$/" ng-model="vm.emailTextCU">
-                <div ng-messages="vm.projectForm.email.$error" role="alert" multiple>
-                    <div ng-message="pattern" class="my-message">Incorrect email</div>
-                </div>
+                <input id="emailInput" type="email" name="emailCU" required ng-pattern="/^.+@.+\..+$/" ng-model="vm.emailTextCU">
             </md-input-container>
             <md-input-container class="md-block">
                 <label for="passwordInput">Password</label>
-                <input id="passwordInput" required type="password" name="password" ng-model="vm.passwordTextCU">
+                <input id="passwordInput" required ng-change="vm.passwordInput_changeHandler()" type="password" name="passwordCU"                                                                        ng-pattern="/^(?=.*[^a-zA-Z])(?=.*[a-z])(?=.*[A-Z])\S{8,}$/" ng-model="vm.passwordTextCU">
+                <div ng-show="vm.passwordShowError" ng-messages="vm.projectForm.passwordCU.$error">
+                    <div ng-message="pattern">Password should be greater than 8 symbols, with upper and lower case letters and digits</div>
+                </div>
             </md-input-container>
             <md-input-container class="md-block">
                 <label for="confirmPasswordInput">Confirm password</label>
-                <input id="confirmPasswordInput" required name="confirmPassword" type="password" ng-model="vm.confirmPasswordTextCU">
-                <div ng-messages="projectForm.confirmPassword.$error">
-                    <div ng-if="showValidationError" ng-message="required">Passwords should be equal</div>
+                <input id="confirmPasswordInput" required name="confirmPasswordCU" type="password" ng-model="vm.confirmPasswordTextCU" ng-change="vm.confirmPasswordInput_changeHandler()" ng-pattern="/^(?=.*[^a-zA-Z])(?=.*[a-z])(?=.*[A-Z])\S{8,}$/">
+                <div ng-messages="vm.projectForm.confirmPasswordCU.$error" multiple>
+                    <div ng-show="vm.showValidationError" ng-message="required">Passwords should be equal</div>
+                    <div ng-show="vm.confirmPasswordShowError" ng-message="pattern">Password should be greater than 8 symbols, with upper and lower case letters and digits</div>
                 </div>
             </md-input-container>
             <md-datepicker name="myBirthday" ng-model="vm.myBirthday" md-placeholder="Enter birthday"></md-datepicker>
@@ -44,11 +45,11 @@
             </h3>
             <md-input-container class="md-block">
                 <label for="emailSUInput">Email</label>
-                <input id="emailSUInput" type="email" name="email" ng-model="vm.emailTextSU" ng-pattern="/^.+@.+\..+$/" required>
+                <input id="emailSUInput" type="email" name="emailSU" ng-model="vm.emailTextSU" ng-pattern="/^.+@.+\..+$/" required>
             </md-input-container>
             <md-input-container class="md-block">
                 <label for="passwordSUInput">Password</label>
-                <input id="passwordSUInput" type="password" ng-model="vm.passwordTextSU" name="password" required>
+                <input id="passwordSUInput" type="password" ng-model="vm.passwordTextSU" name="passwordSU" required>
             </md-input-container>
             <div layout="row" layout-align="end center">
                 <md-button ng-click="vm.loginButton_clickHandler()" class="md-raised">{{vm.loginButtonHeader}}</md-button>

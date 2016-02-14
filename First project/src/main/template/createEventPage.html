@@ -60,6 +60,10 @@
         <div id="toastPositionFriends" layout="row" layout-align="end center">
         </div>
         <md-input-container class="md-block">
+            <label for="messageForGuests">Event description</label>
+            <input id="messageForGuests" name="messageForGuests" ng-model="vm.messageForGuests" type="text">
+        </md-input-container>
+        <md-input-container class="md-block">
             <label for="countryInput">Location</label>
             <input id="countryInput" required name="location" ng-model="vm.locationText" type="text">
         </md-input-container>

@@ -12,6 +12,7 @@ function EventItem() {
     this.endDate = '';
     this.friendList = [];
     this.address = '';
+    this.description = '';
     this.userId = '';
 }
 

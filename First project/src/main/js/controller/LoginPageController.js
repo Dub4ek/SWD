@@ -22,13 +22,16 @@
         vm.showValidationError = false;
         vm.disabledCreateButton = false;
         vm.myBirthday=null;
+        vm.passwordShowError = false;
+        vm.confirmPasswordShowError = false;
+
 
         function saveUserData(data) {
             var accounts = FirebaseAccounts;
 
             accounts[data.uid] = {
                 name: vm.nameTextCU,
-                birthday: vm.myBirthday.toUTCString()
+                birthday: vm.myBirthday ? vm.myBirthday.toUTCString() : ''
             };
 
             accounts.$save()
@@ -76,7 +79,7 @@
         }
 
         function checkValidationErrors(obj) {
-            if (obj.hasOwnProperty('$error')) {
+            if (obj && obj.hasOwnProperty('$error')) {
                 return Object.keys(obj.$error).length === 0;
             }
 
@@ -84,12 +87,12 @@
         }
 
         vm.createAccountButton_clickHandler = function ($event) {
-            vm.showValidationError = !(vm.passwordText === vm.confirmPasswordText);
+            vm.showValidationError = !(vm.passwordTextCU === vm.confirmPasswordTextCU);
             vm.disabledCreateButton = true;
 
-            if (checkValidationErrors(vm.projectForm.email) &&
-                checkValidationErrors(vm.projectForm.password) &&
-                checkValidationErrors(vm.projectForm.confirmPassword) &&
+            if (checkValidationErrors(vm.projectForm.emailCU) &&
+                checkValidationErrors(vm.projectForm.passwordCU) &&
+                checkValidationErrors(vm.projectForm.confirmPasswordCU) &&
                 !vm.showValidationError &&
                 checkValidationErrors(vm.projectForm.nameInput) &&
                 checkValidationErrors(vm.projectForm.myBirthday)) {
@@ -135,9 +138,17 @@
         }
 
         vm.loginButton_clickHandler = function () {
-            if (checkValidationErrors(vm.signupForm.email) && checkValidationErrors(vm.signupForm.password)) {
+            if (checkValidationErrors(vm.signupForm.emailSU) && checkValidationErrors(vm.signupForm.passwordSU)) {
                 signupUser(vm.emailTextSU, vm.passwordTextSU);
             }
+        }
+
+        vm.passwordInput_changeHandler = function() {
+            vm.passwordShowError = Object.keys(vm.projectForm.passwordCU.$error).length > 0;
+        }
+
+        vm.confirmPasswordInput_changeHandler = function() {
+            vm.confirmPasswordShowError = Object.keys(vm.projectForm.confirmPasswordCU.$error).length > 0;
         }
     }
 })();

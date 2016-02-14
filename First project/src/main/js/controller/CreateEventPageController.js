@@ -22,6 +22,8 @@
         vm.friendNameText = '';
         vm.friendEmailText = '';
         vm.addedFriendList = [];
+        vm.messageForGuests = '';
+
 
         function getAuthUserData(auth) {
             return auth ? auth.uid : '';
@@ -36,7 +38,8 @@
             event.startDate = vm.startDateTime.toUTCString();
             event.endDate = vm.endDateTime.toUTCString();
             event.friendList = vm.addedFriendList;
-            event.address = vm.locationText;
+            event.location = vm.locationText;
+            event.description = vm.messageForGuests;
             event.userId = getAuthUserData(auth);
 
             return event;
