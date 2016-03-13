@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Train Schedule Online</title>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+    <link rel="stylesheet" href="./css/app.css">
+    <link rel="shortcut icon" href="">
+</head>
+<body ng-app="TrainScheduleModule" ng-cloak>
+<div class="column" ng-cloak>
+    <div ng-controller="MainPageController as vm" layout="column">
+        <md-toolbar class="md-toolbar-tools" layout="row">
+            <h2>
+                <span>Train Schedule Online</span>
+            </h2>
+        </md-toolbar>
+        <md-progress-linear ng-show="vm.showLoading" md-mode="query"></md-progress-linear>
+        <div layout="column" class="stationSearchContainer">
+            <form name="vm.findTrainScheduleForm">
+                <div layout-xs="column" layout="row"
+                     layout-align-sm="start center" layout-align="start start"
+                     layout-margin>
+                    <md-autocomplete
+                        flex="30"
+                        flex-xs="100"
+                        md-input-name="arrivalAutocomplete"
+                        md-selected-item="vm.selectedArrivalStation"
+                        md-search-text="vm.selectedSearchArrivalStation"
+                        md-selected-item-change="vm.arrivalSelectedItemChange(item)"
+                        md-items="item in vm.stationSearch(vm.selectedSearchArrivalStation)"
+                        md-item-text="item.name"
+                        md-min-length="0"
+                        md-autofocus="true"
+                        placeholder="From">
+                        <md-item-template>
+                            <span md-highlight-text="vm.selectedSearchArrivalStation" md-highlight-flags="^i">{{item.name}}</span>
+                        </md-item-template>
+                        <md-not-found>
+                            No stations matching "{{vm.selectedSearchArrivalStation}}" were found.
+                        </md-not-found>
+                    </md-autocomplete>
+                    <div layout="row"
+                         layout-align-xs="center center" layout-align="center center">
+                        <md-button class="md-raised" ng-click="vm.swapButton_clickHandler()" aria-label="Swap">
+                            <md-icon md-svg-icon="images/icon/swap_horiz_24px.svg"></md-icon>
+                            <md-tooltip md-direction="bottom">
+                                Swap
+                            </md-tooltip>
+                        </md-button>
+                    </div>
+                    <md-autocomplete
+                            flex="30"
+                            flex-xs="100"
+                            md-input-name="departureAutocomplete"
+                            md-selected-item="vm.selectedDepartureStation"
+                            md-search-text="vm.selectedSearchDepartureStation"
+                            md-selected-item-change="vm.departureSelectedItemChange(item)"
+                            md-items="item in vm.stationSearch(vm.selectedSearchDepartureStation)"
+                            md-item-text="item.name"
+                            md-min-length="0"
+                            placeholder="To">
+                        <md-item-template>
+                            <span md-highlight-text="vm.selectedSearchDepartureStation" md-highlight-flags="^i">{{item.name}}</span>
+                        </md-item-template>
+                        <md-not-found>
+                            No stations matching "{{vm.selectedSearchDepartureStation}}" were found.
+                        </md-not-found>
+                    </md-autocomplete>
+                    <md-datepicker name="datePicker"
+                                   flex="30" flex-xs="100"
+                                   required="true" ng-model="vm.selectedTripDate" md-placeholder="Enter date"></md-datepicker>
+                </div>
+            </form>
+            <div layout="row" layout-align="end center">
+                <md-button type="submit" class="md-primary md-raised" aria-label="Find" ng-click="vm.findButton_clickHandler()">Find</md-button>
+            </div>
+            <div id="toastPosition" style="width: 300px" layout="column"></div>
+            <md-content flex layout="column" class="scheduleListBorder">
+                <md-list flex class="trainSheduleList">
+                    <md-list-item class="md-3-line" ng-repeat="item in vm.foundTrainsCollection">
+                        <div class="md-list-item-text" layout="column">
+                            <h1>{{item.caption}}</h1>
+                            <p ng-if="item.arrival">Arrival: {{item.arrival}}  Departure: {{item.departure}}</p>
+                            <p ng-if="item.duration">Duration: {{item.duration}} hour</p>
+                        </div>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                <md-list>
+            </md-content>
+        </div>
+    </div>
+</div>
+<script src="./js/all.js" type="text/javascript"></script>
+</body>
+</html>
