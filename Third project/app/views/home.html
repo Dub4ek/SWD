@@ -1,0 +1,16 @@
+<div flex layout="column">
+    <md-content flex layout="row" layout-align="start center">
+        <md-input-container class="md-block" flex-gt-xs>
+            <label>Enter restaurant name or cusine type</label>
+            <input ng-model="vm.searchQuery">
+        </md-input-container>
+        <md-button>Search</md-button>
+    </md-content>
+    <md-divider flex></md-divider>
+    <md-content flex layout="column">
+        <div>
+            <md-button ng-click="vm.viewChange_clickHandler($event)">Change view</md-button>
+        </div>
+        <div flex ui-view="viewType"></div>
+    </md-content>
+</div>

@@ -1,0 +1,21 @@
+<md-grid-list
+        md-cols-xs="1" md-cols-sm="2" md-cols-md="3" md-cols-gt-md="4"
+        md-row-height="320px"
+        md-gutter="12px">
+    <md-grid-tile class="gridTile" md-rowspan="1" md-colspan="1" ng-repeat="item in vm.restaurantCollection"
+                  ng-click="vm.gridTile_clickHandler($event)">
+        <md-grid-tile-header>
+            <div layout="row" layout-align="start start" layout-margin>
+                <span>{{item.status}}</span>
+                <span flex></span>
+                <span>{{item.rating}}</span>
+            </div>
+        </md-grid-tile-header>
+        <img alt="Restaurant photo" ng-src="{{item.imgUrl}}">
+        <md-grid-tile-footer>
+            <span>{{item.header}}</span></br>
+            <span>{{item.address}}</span></br>
+            <span>{{item.shortDescription}}</span>
+        </md-grid-tile-footer>
+    </md-grid-tile>
+</md-grid-list>

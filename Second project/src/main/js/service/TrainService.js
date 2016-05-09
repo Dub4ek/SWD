@@ -26,7 +26,11 @@
 
         this.findRoute = function (stationFrom, stationTo, date) {
             return $http.get(REQUEST_URL, {
-                params: getRequestParams(stationFrom, stationTo, 1, date)
+                params: getRequestParams(stationFrom, stationTo, 1, date),
+                withCredentials: true,
+                headers: {
+                    'Access-Control-Allow-Credentials': true
+                }
             });
         }
 

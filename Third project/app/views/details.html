@@ -1,0 +1,19 @@
+<div flex layout="column">
+    <div flex layout="row">
+        <h4>Restaurant caption</h4>
+    </div>
+    <div layout="column" flex>
+        <div>Images</div>
+        <md-content flex>
+            Restaurant description
+            Restaurant address
+        </md-content>
+    </div>
+    <md-content flex>
+        <md-list>
+            <md-list-item ng-repeat="item in vm.restaurantReviewCollection">
+                <p> {{ item.text }} </p>
+            </md-list-item>
+        </md-list>
+    </md-content>
+</div>
